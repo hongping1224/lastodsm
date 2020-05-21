@@ -30,9 +30,8 @@ func main() {
 	numOFCPU = runtime.NumCPU()
 	flag.IntVar(&numOFCPU, "cpuCount", numOFCPU, "Cpu use for compute")
 	dir := "./"
-
 	flag.StringVar(&dir, "dir", dir, "directory to process")
-	gap := float64(1.0)
+	gap := float64(0.01)
 	flag.Float64Var(&gap, "size", gap, "pixel size")
 	outPath := ""
 	flag.StringVar(&outPath, "out", outPath, "Output path (default PointDensity_xxx.tiff)\n single file or Mode 1, Input a filepath \n Mode 0 , Input a Dir")
@@ -142,6 +141,7 @@ func Run(filepath string, gap float64, outPath string) {
 		return
 	}
 	densityMap, xrange, yrange := Calculate(lf, lf.Header.MinX, lf.Header.MinY, lf.Header.MaxX, lf.Header.MaxY, gap)
+	fmt.Println(xrange, yrange)
 	LB := counter.Point{X: lf.Header.MinX, Y: lf.Header.MinY}
 	SaveDSMTiff(outPath, densityMap, xrange, yrange, gap, LB)
 	SaveLabelTiff(outPath, densityMap, xrange, yrange, gap, LB)
