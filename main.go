@@ -34,7 +34,7 @@ func main() {
 	gap := float64(0.01)
 	flag.Float64Var(&gap, "size", gap, "pixel size")
 	outPath := ""
-	flag.StringVar(&outPath, "out", outPath, "Output path (default PointDensity_xxx.tiff)\n single file or Mode 1, Input a filepath \n Mode 0 , Input a Dir")
+	flag.StringVar(&outPath, "out", outPath, "Output Dir")
 	flag.Parse()
 	start := time.Now()
 	defer exit(start)

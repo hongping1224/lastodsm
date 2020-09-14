@@ -24,15 +24,16 @@ const (
 
 type Counter struct {
 	LBCoordinate Point
-	DensityMap   []lidario.LasPointer
-	Mux          []sync.Mutex
-	MapSize      int
-	XRange       int
-	YRange       int
-	gap          float64
-	ReadStream   chan lidario.LasPointer
-	WriteStream  chan lidario.LasPointer
-	WG           *sync.WaitGroup
+	DensityMap   []uint32
+	IntensitMap  []uint32
+	//Mux          []sync.Mutex
+	MapSize     int
+	XRange      int
+	YRange      int
+	gap         float64
+	ReadStream  chan lidario.LasPointer
+	WriteStream chan lidario.LasPointer
+	WG          *sync.WaitGroup
 }
 
 func (counter *Counter) Count(start int, end int, lf *lidario.LasFile, wg *sync.WaitGroup) {
@@ -55,12 +56,13 @@ func (counter *Counter) Init(minx, miny, maxx, maxy, gap float64) {
 	counter.gap = gap
 	counter.XRange = int(math.Ceil((maxx - minx) / gap))
 	counter.YRange = int(math.Ceil((maxy - miny) / gap))
-	defaultPoint := lidario.PointRecord0{Z: math.Inf(-1), PointSourceID: 0}
-	counter.DensityMap = make([]lidario.LasPointer, counter.XRange*counter.YRange)
+	counter.DensityMap = make([]uint32, counter.XRange*counter.YRange)
+	counter.IntensitMap = make([]uint32, counter.XRange*counter.YRange)
 	for i := 0; i < counter.XRange*counter.YRange; i++ {
-		counter.DensityMap[i] = &defaultPoint
+		counter.DensityMap[i] = 0
+		counter.IntensitMap[i] = 0
 	}
-	counter.Mux = make([]sync.Mutex, counter.XRange*counter.YRange)
+	//counter.Mux = make([]sync.Mutex, counter.XRange*counter.YRange)
 	counter.MapSize = counter.XRange * counter.YRange
 }
 
@@ -118,11 +120,10 @@ func writerHandler(point lidario.LasPointer, counter *Counter) {
 		//ignore point outside map
 		return
 	}
-	counter.Mux[index].Lock()
+	//counter.Mux[index].Lock()
 	//check is highest
-	oriData := counter.DensityMap[index].PointData()
-	if oriData.Z < pointdata.Z {
-		counter.DensityMap[index] = point
-	}
-	counter.Mux[index].Unlock()
+	//fmt.Println(counter.DensityMap[index])
+	counter.DensityMap[index]++
+	counter.IntensitMap[index] += uint32(pointdata.Intensity)
+	//counter.Mux[index].Unlock()
 }
