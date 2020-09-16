@@ -8,7 +8,7 @@ import (
 	"math"
 	"sync"
 
-	"github.com/jblindsay/lidario"
+	"github.com/hongping1224/lidario"
 )
 
 type Point struct {

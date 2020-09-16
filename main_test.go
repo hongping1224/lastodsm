@@ -14,7 +14,7 @@ import (
 	"testing"
 	"unsafe"
 
-	"github.com/jblindsay/lidario"
+	"github.com/hongping1224/lidario"
 	"gitlab.com/hongping1224/pointtodsm/counter"
 )
 

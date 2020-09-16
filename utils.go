@@ -11,7 +11,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/jblindsay/lidario"
+	"github.com/hongping1224/lidario"
 )
 
 func openLasFile(fileName string) (*lidario.LasFile, error) {

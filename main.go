@@ -20,7 +20,7 @@ import (
 
 	"github.com/hongping1224/lastodsm/counter"
 	tiff32 "github.com/hongping1224/lastodsm/tiff"
-	"github.com/jblindsay/lidario"
+	"github.com/hongping1224/lidario"
 )
 
 var numOFCPU int
